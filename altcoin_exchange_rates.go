@@ -12,6 +12,7 @@ import (
 	"github.com/eclipse/paho.mqtt.golang"
 )
 
+// MQTT server config data structure
 type MqttConfig struct {
 	Server	string
 	Port	int
@@ -19,6 +20,7 @@ type MqttConfig struct {
 	ClientID	string
 }
 
+// Program configuration data structure
 type Config struct {
 	Mqtt	MqttConfig `json:"mqtt"`
 	Message	string `json:"message"`
@@ -28,6 +30,7 @@ type Config struct {
 	Logfile	string `json:"logfile"`
 }
 
+// Coin data structure
 type CoinData struct {
 	Id	string `json:"id"`
 	Name	string `json:"name"`
@@ -45,6 +48,7 @@ type CoinData struct {
 	Last_updated	string `json:"last_updated"`
 }
 
+// Main function
 func main() {
 	// Load config from config.json
 	file, _ := os.Open("config.json")
