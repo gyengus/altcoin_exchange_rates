@@ -1,0 +1,4 @@
+language: go
+
+before_install:
+  - go get -t -v ./...
