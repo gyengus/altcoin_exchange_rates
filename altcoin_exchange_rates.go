@@ -1,4 +1,5 @@
-package main
+// altoin_exchange_rates package
+package altcoin_exchange_rates
 
 import (
 	"strconv"
@@ -12,43 +13,47 @@ import (
 	"github.com/eclipse/paho.mqtt.golang"
 )
 
-// MQTT server config data structure
+// MqttConfig type is server config data structure
 type MqttConfig struct {
+	// Server url or ip address
 	Server	string
+	// Port is the MQTT servers port
 	Port	int
+	// Topic
 	Topic	string
+	// ClientID
 	ClientID	string
 }
 
-// Program configuration data structure
+// Config type is a struct to store program configuration data
 type Config struct {
 	Mqtt	MqttConfig `json:"mqtt"`
 	Message	string `json:"message"`
-	Url	string `json:"url"`
-	Request_timeout	int `json:"request_timeout"`
+	URL	string `json:"url"`
+	RequestTimeout	int `json:"request_timeout"`
 	Coins	[]string `json:"coins"`
 	Logfile	string `json:"logfile"`
 }
 
-// Coin data structure
+// CoinData structure is store the coins datas
 type CoinData struct {
-	Id	string `json:"id"`
+	ID	string `json:"id"`
 	Name	string `json:"name"`
 	Symbol	string `json:"symbol"`
 	Rank	string `json:"rank"`
-	Price_usd	string `json:"price_usd"`
-	Price_btc	string `json:"price_btc"`
-	Aday_volume_usd	string `json:"24h_volume_usd"`
-	Market_cap_usd	string `json:"market_cap_usd"`
-	Total_supply	string `json:"total_supply"`
-	Max_supply	string `json:"max_supply"`
-	Percent_change_1h	string `json:"percent_change_1h"`
-	Percent_change_24h	string `json:"percent_change_24h"`
-	Percent_change_7d	string `json:"percent_change_7d"`
-	Last_updated	string `json:"last_updated"`
+	PriceUSD	string `json:"price_usd"`
+	PriceBTC	string `json:"price_btc"`
+	AdayVolumeUSD	string `json:"24h_volume_usd"`
+	MarketCapUSD	string `json:"market_cap_usd"`
+	TotalSupply	string `json:"total_supply"`
+	MaxSupply	string `json:"max_supply"`
+	PercentChange1h	string `json:"percent_change_1h"`
+	PercentChange24h	string `json:"percent_change_24h"`
+	PercentChange7d	string `json:"percent_change_7d"`
+	LastUpdated	string `json:"last_updated"`
 }
 
-// Main function
+// main function
 func main() {
 	// Load config from config.json
 	file, _ := os.Open("config.json")
@@ -69,19 +74,19 @@ func main() {
 
 	// Get exchange rates
 	var httpClient = &http.Client{
-		Timeout: time.Second * time.Duration(config.Request_timeout),
+		Timeout: time.Second * time.Duration(config.RequestTimeout),
 	}
-	exchange_rates := make(map[string]CoinData)
+	exchangeRates := make(map[string]CoinData)
 	for _, coin := range config.Coins {
 		var coinData []CoinData
-		response, err := httpClient.Get(config.Url + coin)
+		response, err := httpClient.Get(config.URL + coin)
 		if err == nil {
 			buf, err := ioutil.ReadAll(response.Body)
 			response.Body.Close()
 			if err == nil {
 				err = json.Unmarshal(buf, &coinData)
 				if err == nil {
-					exchange_rates[coin] = coinData[0]
+					exchangeRates[coin] = coinData[0]
 				} else {
 					log.Printf("Error when parsing json: %s\n", err.Error())
 				}
@@ -102,7 +107,7 @@ func main() {
 	}
 
 	// Publish data
-	mqttMessage, err := json.Marshal(exchange_rates)
+	mqttMessage, err := json.Marshal(exchangeRates)
 	if err == nil {
 		if token := client.Publish(config.Mqtt.Topic, 1, true, mqttMessage); token.Wait() && token.Error() != nil {
 			log.Printf("Error when publish MQTT message: %s\n", token.Error())
