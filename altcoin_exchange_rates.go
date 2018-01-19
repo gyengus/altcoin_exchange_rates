@@ -1,5 +1,5 @@
-// altoin_exchange_rates package
-package altcoin_exchange_rates
+// AltoinExchangeRates package
+package AltcoinExchangeRates
 
 import (
 	"strconv"
@@ -53,15 +53,16 @@ type CoinData struct {
 	LastUpdated	string `json:"last_updated"`
 }
 
+var config = new(Config)
+var httpClient = &http.Client{}
+
+
 // main function
 func main() {
-	// Load config from config.json
-	file, _ := os.Open("config.json")
-	decoder := json.NewDecoder(file)
-	config := new(Config)
-	conferr := decoder.Decode(&config)
-	if conferr != nil {
-		log.Fatal(conferr)
+	config = loadConfig()
+
+	httpClient = &http.Client{
+		Timeout: time.Second * time.Duration(config.RequestTimeout),
 	}
 
 	// Open or create logfile
@@ -72,33 +73,12 @@ func main() {
 	defer logfile.Close()
 	log.SetOutput(logfile)
 
-	// Get exchange rates
-	var httpClient = &http.Client{
-		Timeout: time.Second * time.Duration(config.RequestTimeout),
-	}
-	exchangeRates := make(map[string]CoinData)
-	for _, coin := range config.Coins {
-		var coinData []CoinData
-		response, err := httpClient.Get(config.URL + coin)
-		if err == nil {
-			buf, err := ioutil.ReadAll(response.Body)
-			response.Body.Close()
-			if err == nil {
-				err = json.Unmarshal(buf, &coinData)
-				if err == nil {
-					exchangeRates[coin] = coinData[0]
-				} else {
-					log.Printf("Error when parsing json: %s\n", err.Error())
-				}
-			} else {
-				log.Println("Error when read data: " + err.Error())
-			}
-		} else {
-			log.Println("Error when getting data: " + err.Error())
-		}
-	}
+	sendMQTTMessage(getExchangeRates())
 
-	// Connect to the MQTT Server.
+}
+
+// sendMQTTMessage func is Connecting to the MQTT Server and sending coins datas message to the topic
+func sendMQTTMessage(exchangeRates map[string]CoinData) {
 	opts := mqtt.NewClientOptions().AddBroker("tcp://" + config.Mqtt.Server + ":" + strconv.Itoa(config.Mqtt.Port)).SetClientID(config.Mqtt.ClientID)
 
 	client := mqtt.NewClient(opts)
@@ -118,5 +98,53 @@ func main() {
 
 	// Disconnect the Network Connection.
 	client.Disconnect(250)
+}
 
+// getExchangeRates func is getting and build exchange rates
+func getExchangeRates() map[string]CoinData {
+	exchangeRates := make(map[string]CoinData)
+	for _, coin := range config.Coins {
+		var tmp = CoinData{}
+		tmp, err := httpGet(config.URL + coin)
+		if err == nil {
+			exchangeRates[coin] = tmp
+		}
+	}
+	return exchangeRates
+}
+
+// httpGet func is getting coin data from url
+func httpGet(url string) (CoinData, error) {
+	response, err := httpClient.Get(url)
+	if err == nil {
+		buf, err := ioutil.ReadAll(response.Body)
+		response.Body.Close()
+		if err == nil {
+			var coinData []CoinData
+			err = json.Unmarshal(buf, &coinData)
+			if err == nil {
+				return coinData[0], nil
+			} else {
+				log.Printf("Error when parsing json: %s\n", err.Error())
+			}
+		} else {
+			log.Println("Error when read data: " + err.Error())
+		}
+	} else {
+		log.Println("Error when getting data: " + err.Error())
+	}
+	return CoinData{}, err
+}
+
+// loadConfig func loads config from config.json
+func loadConfig() *Config {
+	var conf = new(Config)
+	file, _ := os.Open("config.json")
+	decoder := json.NewDecoder(file)
+	conferr := decoder.Decode(&conf)
+	if conferr != nil {
+		log.Fatal(conferr)
+	}
+	file.Close()
+	return conf
 }
