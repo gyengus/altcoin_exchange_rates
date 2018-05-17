@@ -1,0 +1,21 @@
+{
+	"mqtt": {
+		"server": "192.168.0.200",
+		"port": 1883,
+		"topic": "exchange_rates",
+		"clientID": "altcoin_exchange_rates",
+                "username": "altcoin_exchange_rates",
+                "password": "273ktmtybee3mnVhkeenka"
+	},
+	"url": "https://api.coinmarketcap.com/v1/ticker/",
+	"request_timeout": 20,
+	"coins": [
+		"ethereum",
+		"monero",
+		"ripple",
+		"zcash",
+		"bytecoin-bcn"
+	],
+	"logfile": "altcoin_exchange_rates.log"
+}
+
