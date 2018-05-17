@@ -1,5 +1,4 @@
-// AltoinExchangeRates package
-package AltcoinExchangeRates
+package main
 
 import (
 	"strconv"
@@ -23,6 +22,10 @@ type MqttConfig struct {
 	Topic	string
 	// ClientID
 	ClientID	string
+	// Username
+	Username	string
+	// Password
+	Password	string
 }
 
 // Config type is a struct to store program configuration data
@@ -80,6 +83,12 @@ func main() {
 // sendMQTTMessage func is Connecting to the MQTT Server and sending coins datas message to the topic
 func sendMQTTMessage(exchangeRates map[string]CoinData) {
 	opts := mqtt.NewClientOptions().AddBroker("tcp://" + config.Mqtt.Server + ":" + strconv.Itoa(config.Mqtt.Port)).SetClientID(config.Mqtt.ClientID)
+	if (config.Mqtt.Username != "") {
+		opts = opts.SetUsername(config.Mqtt.Username)
+		if (config.Mqtt.Password != "") {
+			opts = opts.SetPassword(config.Mqtt.Password)
+		}
+	}
 
 	client := mqtt.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {

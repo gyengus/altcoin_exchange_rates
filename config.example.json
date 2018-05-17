@@ -3,7 +3,9 @@
 		"server": "",
 		"port": 1883,
 		"topic": "exchange_rates",
-		"clientID": "altcoin_exchange_rates"
+		"clientID": "altcoin_exchange_rates",
+		"username": "",
+		"password": ""
 	},
 	"url": "https://api.coinmarketcap.com/v1/ticker/",
 	"request_timeout": 20,
