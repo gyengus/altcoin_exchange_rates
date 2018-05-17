@@ -133,9 +133,8 @@ func httpGet(url string) (CoinData, error) {
 			err = json.Unmarshal(buf, &coinData)
 			if err == nil {
 				return coinData[0], nil
-			} else {
-				log.Printf("Error when parsing json: %s\n", err.Error())
 			}
+			log.Printf("Error when parsing json: %s\n", err.Error())
 		} else {
 			log.Println("Error when read data: " + err.Error())
 		}
