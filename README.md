@@ -8,7 +8,7 @@ This program get cryptocoins exchange rates, then publish them to a specified MQ
 
 See `config.example.json`. Copy it to `config.json` and fill `mqtt.server` field. You can add or remove coins in the coins array.
 
-For Home Assistant setup and more information [click here](http://gyengus.hu/2018/01/arfolyamok-megjelenitese?utm_source=github_repo)!
+For Home Assistant setup and more information [click here](https://gyengus.hu/2018/01/arfolyamok-megjelenitese?utm_source=github_repo)!
 
 ### Donations
 - PayPal: https://paypal.me/gyengus
