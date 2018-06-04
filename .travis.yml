@@ -3,3 +3,9 @@ language: go
 before_install:
   - go get -t -v ./...
   - cp config.example.json config.json
+
+script:
+  - cp config.example.json config.json
+  - go test
+  - go test -bench=.
+  - go build
