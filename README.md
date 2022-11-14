@@ -1,6 +1,8 @@
 # Altcoin exchange rates
 
-[![Build Status](https://travis-ci.org/gyengus/altcoin_exchange_rates.svg?branch=master)](https://travis-ci.org/gyengus/altcoin_exchange_rates) [![Go Report Card](https://goreportcard.com/badge/github.com/gyengus/altcoin_exchange_rates)](https://goreportcard.com/report/github.com/gyengus/altcoin_exchange_rates) [![GoDoc](https://godoc.org/github.com/gyengus/altcoin_exchange_rates?status.svg)](https://godoc.org/github.com/gyengus/altcoin_exchange_rates) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K5PAV5V7WGWFL)
+[![Build Status](https://travis-ci.org/gyengus/altcoin_exchange_rates.svg?branch=master)](https://travis-ci.org/gyengus/altcoin_exchange_rates) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/gyengus/altcoin_exchange_rates)](https://goreportcard.com/report/github.com/gyengus/altcoin_exchange_rates) 
+[![GoDoc](https://godoc.org/github.com/gyengus/altcoin_exchange_rates?status.svg)](https://godoc.org/github.com/gyengus/altcoin_exchange_rates)
 
 This program get cryptocoins exchange rates, then publish them to a specified MQTT topic.
 
