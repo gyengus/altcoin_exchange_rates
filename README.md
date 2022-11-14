@@ -10,8 +10,9 @@ See `config.example.json`. Copy it to `config.json` and fill `mqtt.server` field
 
 For Home Assistant setup and more information [click here](https://gyengus.hu/2018/01/arfolyamok-megjelenitese?utm_source=github_repo)!
 
-### Donations
-- PayPal: https://paypal.me/gyengus
-- Bitcoin: 1QJzLBK9uQP4RthmKJRQwy3v5sd4XS4S7P
-- Bitcoin Cash: qp04tazu4fe7lv6zr99suu40swqqp747nsm0kcfckv
-- Ethereum: 0x2bD68120A56acBf6Dbd11da2060228b8912C1e3C
+### Tips
+- Bitcoin: bc1qx4q5epl7nsyu9mum8edrvp2my8tut0enrz7kcn
+- EVM compatible (Ethereum, Fantom, Polygon, etc.): 0x9F0a70A7306DF3fc072446cAF540F6766a4CC4E8
+- Litecoin: ltc1qk2gf43u3lw6vzhvah03wns0nkgetg2c7ea0w5r
+- Solana: 14SHwk3jTNYdMkEvpbq1j7Eu9iUJ3GySnaBF4kqBR8Ah
+- Flux: t1T3x4HExm4nWD7gN68px9zCF3ZFQyneFSK
